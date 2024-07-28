@@ -16,8 +16,8 @@
 int ConditionFunctions::luaConditionCreate(lua_State* L) {
 	// Condition(conditionType[, conditionId = CONDITIONID_COMBAT[, subid = 0]])
 	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
-	ConditionId_t conditionId = getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
-	uint32_t subId = getNumber<uint32_t>(L, 4, 0);
+	auto conditionId = getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
+	auto subId = getNumber<uint32_t>(L, 4, 0);
 
 	std::shared_ptr<Condition> condition = Condition::createCondition(conditionId, conditionType, 0, 0, false, subId);
 	if (condition) {
