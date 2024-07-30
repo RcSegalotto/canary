@@ -438,7 +438,7 @@ void ConditionAttributes::addCondition(std::shared_ptr<Creature> creature, const
 		updateCharmChanceModifier(creature);
 		disableDefense = conditionAttrs->disableDefense;
 
-		if (std::shared_ptr<Player> player = creature->getPlayer()) {
+		if (const auto player = creature->getPlayer()) {
 			updatePercentSkills(player);
 			updateSkills(player);
 			updatePercentStats(player);
@@ -542,7 +542,7 @@ bool ConditionAttributes::startCondition(std::shared_ptr<Creature> creature) {
 	updatePercentIncreases(creature);
 	updateIncreases(creature);
 	updateCharmChanceModifier(creature);
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		updatePercentSkills(player);
 		updateSkills(player);
 		updatePercentStats(player);
@@ -552,7 +552,7 @@ bool ConditionAttributes::startCondition(std::shared_ptr<Creature> creature) {
 	return true;
 }
 
-void ConditionAttributes::updatePercentStats(std::shared_ptr<Player> player) {
+void ConditionAttributes::updatePercentStats(const std::shared_ptr<Player> &player) {
 	for (int32_t i = STAT_FIRST; i <= STAT_LAST; ++i) {
 		if (statsPercent[i] == 0) {
 			continue;
@@ -578,7 +578,7 @@ void ConditionAttributes::updatePercentStats(std::shared_ptr<Player> player) {
 	}
 }
 
-void ConditionAttributes::updateStats(std::shared_ptr<Player> player) {
+void ConditionAttributes::updateStats(const std::shared_ptr<Player> &player) {
 	bool needUpdate = false;
 
 	for (int32_t i = STAT_FIRST; i <= STAT_LAST; ++i) {
@@ -594,9 +594,9 @@ void ConditionAttributes::updateStats(std::shared_ptr<Player> player) {
 	}
 }
 
-void ConditionAttributes::updatePercentSkills(std::shared_ptr<Player> player) {
+void ConditionAttributes::updatePercentSkills(const std::shared_ptr<Player> &player) {
 	for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
-		skills_t skill = static_cast<skills_t>(i);
+		auto skill = static_cast<skills_t>(i);
 		if (skillsPercent[skill] == 0) {
 			continue;
 		}
@@ -606,7 +606,7 @@ void ConditionAttributes::updatePercentSkills(std::shared_ptr<Player> player) {
 	}
 }
 
-void ConditionAttributes::updateSkills(std::shared_ptr<Player> player) {
+void ConditionAttributes::updateSkills(const std::shared_ptr<Player> &player) {
 	bool needUpdateSkills = false;
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
@@ -621,7 +621,7 @@ void ConditionAttributes::updateSkills(std::shared_ptr<Player> player) {
 	}
 }
 
-void ConditionAttributes::updatePercentAbsorbs(std::shared_ptr<Creature> creature) {
+void ConditionAttributes::updatePercentAbsorbs(const std::shared_ptr<Creature> &creature) {
 	for (uint8_t i = 0; i < COMBAT_COUNT; i++) {
 		auto value = getAbsorbPercentByIndex(i);
 		if (value == 0) {
@@ -631,7 +631,7 @@ void ConditionAttributes::updatePercentAbsorbs(std::shared_ptr<Creature> creatur
 	}
 }
 
-void ConditionAttributes::updateAbsorbs(std::shared_ptr<Creature> creature) const {
+void ConditionAttributes::updateAbsorbs(const std::shared_ptr<Creature> &creature) const {
 	for (uint8_t i = 0; i < COMBAT_COUNT; i++) {
 		auto value = getAbsorbByIndex(i);
 		if (value == 0) {
@@ -642,7 +642,7 @@ void ConditionAttributes::updateAbsorbs(std::shared_ptr<Creature> creature) cons
 	}
 }
 
-void ConditionAttributes::updatePercentIncreases(std::shared_ptr<Creature> creature) {
+void ConditionAttributes::updatePercentIncreases(const std::shared_ptr<Creature> &creature) {
 	for (uint8_t i = 0; i < COMBAT_COUNT; i++) {
 		auto increasePercentValue = getIncreasePercentById(i);
 		if (increasePercentValue == 0) {
@@ -652,7 +652,7 @@ void ConditionAttributes::updatePercentIncreases(std::shared_ptr<Creature> creat
 	}
 }
 
-void ConditionAttributes::updateIncreases(std::shared_ptr<Creature> creature) const {
+void ConditionAttributes::updateIncreases(const std::shared_ptr<Creature> &creature) const {
 	for (uint8_t i = 0; i < COMBAT_COUNT; i++) {
 		auto increaseValue = getIncreaseByIndex(i);
 		if (increaseValue == 0) {
@@ -662,11 +662,11 @@ void ConditionAttributes::updateIncreases(std::shared_ptr<Creature> creature) co
 	}
 }
 
-void ConditionAttributes::updateCharmChanceModifier(std::shared_ptr<Creature> creature) const {
+void ConditionAttributes::updateCharmChanceModifier(const std::shared_ptr<Creature> &creature) const {
 	creature->setCharmChanceModifier(creature->getCharmChanceModifier() + charmChanceModifier);
 }
 
-void ConditionAttributes::updatePercentBuffs(std::shared_ptr<Creature> creature) {
+void ConditionAttributes::updatePercentBuffs(const std::shared_ptr<Creature> &creature) {
 	for (int32_t i = BUFF_FIRST; i <= BUFF_LAST; ++i) {
 		if (buffsPercent[i] == 0) {
 			continue;
@@ -677,7 +677,7 @@ void ConditionAttributes::updatePercentBuffs(std::shared_ptr<Creature> creature)
 	}
 }
 
-void ConditionAttributes::updateBuffs(std::shared_ptr<Creature> creature) {
+void ConditionAttributes::updateBuffs(const std::shared_ptr<Creature> &creature) {
 	bool needUpdate = false;
 	for (int32_t i = BUFF_FIRST; i <= BUFF_LAST; ++i) {
 		if (buffs[i]) {
@@ -695,7 +695,7 @@ bool ConditionAttributes::executeCondition(std::shared_ptr<Creature> creature, i
 }
 
 void ConditionAttributes::endCondition(std::shared_ptr<Creature> creature) {
-	std::shared_ptr<Player> player = creature->getPlayer();
+	const auto player = creature->getPlayer();
 	if (player) {
 		bool needUpdate = false;
 
@@ -1102,14 +1102,14 @@ bool ConditionRegeneration::startCondition(std::shared_ptr<Creature> creature) {
 		return false;
 	}
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		player->sendStats();
 	}
 	return true;
 }
 
 void ConditionRegeneration::endCondition(std::shared_ptr<Creature> creature) {
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		player->sendStats();
 	}
 }
@@ -1244,8 +1244,8 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value) {
 	}
 }
 
-uint32_t ConditionRegeneration::getHealthTicks(std::shared_ptr<Creature> creature) const {
-	std::shared_ptr<Player> player = creature->getPlayer();
+uint32_t ConditionRegeneration::getHealthTicks(const std::shared_ptr<Creature> &creature) const {
+	const auto player = creature->getPlayer();
 
 	if (player != nullptr && isBuff) {
 		return healthTicks / g_configManager().getFloat(RATE_SPELL_COOLDOWN, __FUNCTION__);
@@ -1254,8 +1254,8 @@ uint32_t ConditionRegeneration::getHealthTicks(std::shared_ptr<Creature> creatur
 	return healthTicks;
 }
 
-uint32_t ConditionRegeneration::getManaTicks(std::shared_ptr<Creature> creature) const {
-	std::shared_ptr<Player> player = creature->getPlayer();
+uint32_t ConditionRegeneration::getManaTicks(const std::shared_ptr<Creature> &creature) const {
+	const auto player = creature->getPlayer();
 
 	if (player != nullptr && isBuff) {
 		return manaTicks / g_configManager().getFloat(RATE_SPELL_COOLDOWN, __FUNCTION__);
@@ -1276,7 +1276,7 @@ bool ConditionManaShield::startCondition(std::shared_ptr<Creature> creature) {
 	creature->setManaShield(manaShield);
 	creature->setMaxManaShield(manaShield);
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		player->sendStats();
 	}
 
@@ -1286,7 +1286,7 @@ bool ConditionManaShield::startCondition(std::shared_ptr<Creature> creature) {
 void ConditionManaShield::endCondition(std::shared_ptr<Creature> creature) {
 	creature->setManaShield(0);
 	creature->setMaxManaShield(0);
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		player->sendStats();
 	}
 }
@@ -1301,7 +1301,7 @@ void ConditionManaShield::addCondition(std::shared_ptr<Creature> creature, const
 	creature->setManaShield(manaShield);
 	creature->setMaxManaShield(manaShield);
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		player->sendStats();
 	}
 }
@@ -1379,7 +1379,7 @@ void ConditionSoul::serialize(PropWriteStream &propWriteStream) {
 bool ConditionSoul::executeCondition(std::shared_ptr<Creature> creature, int32_t interval) {
 	internalSoulTicks += interval;
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (const auto player = creature->getPlayer()) {
 		if (player->getZoneType() != ZONE_PROTECTION) {
 			if (internalSoulTicks >= soulTicks) {
 				internalSoulTicks = 0;
@@ -1643,7 +1643,7 @@ bool ConditionDamage::getNextDamage(int32_t &damage) {
 	return false;
 }
 
-bool ConditionDamage::doDamage(std::shared_ptr<Creature> creature, int32_t healthChange) {
+bool ConditionDamage::doDamage(const std::shared_ptr<Creature> &creature, int32_t healthChange) {
 	auto attacker = g_game().getPlayerByGUID(owner) ? g_game().getPlayerByGUID(owner)->getCreature() : g_game().getCreatureByID(owner);
 	bool isPlayer = attacker && attacker->getPlayer();
 	if (creature->isSuppress(getType(), isPlayer)) {
@@ -1808,7 +1808,7 @@ bool ConditionFeared::isStuck(std::shared_ptr<Creature> creature, Position pos) 
 	});
 }
 
-bool ConditionFeared::getRandomDirection(std::shared_ptr<Creature> creature, Position pos) {
+bool ConditionFeared::getRandomDirection(const std::shared_ptr<Creature> &creature, Position pos) {
 	static std::vector<Direction> directions {
 		DIRECTION_NORTH,
 		DIRECTION_NORTHEAST,
@@ -1831,7 +1831,7 @@ bool ConditionFeared::getRandomDirection(std::shared_ptr<Creature> creature, Pos
 	return false;
 }
 
-bool ConditionFeared::canWalkTo(std::shared_ptr<Creature> creature, Position pos, Direction moveDirection) const {
+bool ConditionFeared::canWalkTo(const std::shared_ptr<Creature> &creature, Position pos, Direction moveDirection) const {
 	pos = getNextPosition(moveDirection, pos);
 	if (!creature) {
 		g_logger().error("[{}] creature is nullptr", __FUNCTION__);
@@ -1850,7 +1850,7 @@ bool ConditionFeared::canWalkTo(std::shared_ptr<Creature> creature, Position pos
 	return false;
 }
 
-bool ConditionFeared::getFleeDirection(std::shared_ptr<Creature> creature) {
+bool ConditionFeared::getFleeDirection(const std::shared_ptr<Creature> &creature) {
 	Position creaturePos = creature->getPosition();
 
 	int_fast32_t offx = Position::getOffsetX(creaturePos, fleeingFromPos);
@@ -1926,7 +1926,7 @@ bool ConditionFeared::getFleeDirection(std::shared_ptr<Creature> creature) {
 	return false;
 }
 
-bool ConditionFeared::getFleePath(std::shared_ptr<Creature> creature, const Position &pos, std::vector<Direction> &dirList) {
+bool ConditionFeared::getFleePath(const std::shared_ptr<Creature> &creature, const Position &pos, std::vector<Direction> &dirList) {
 	const std::vector<uint8_t> walkSize { 15, 9, 3, 1 };
 	bool found = false;
 	std::ptrdiff_t found_size = 0;
@@ -2056,7 +2056,7 @@ void ConditionFeared::endCondition(std::shared_ptr<Creature> creature) {
 	/*
 	 * After a player is feared there's a 10 seconds before they can can feared again.
 	 */
-	std::shared_ptr<Player> player = creature->getPlayer();
+	const auto player = creature->getPlayer();
 	if (player) {
 		player->setImmuneFear();
 	}
@@ -2312,7 +2312,7 @@ void ConditionOutfit::addCondition(std::shared_ptr<Creature> creature, const std
 		setTicks(addCondition->getTicks());
 
 		const std::shared_ptr<ConditionOutfit> &conditionOutfit = addCondition->static_self_cast<ConditionOutfit>();
-		if (!conditionOutfit->monsterName.empty() && conditionOutfit->monsterName.compare(monsterName) != 0) {
+		if (!conditionOutfit->monsterName.empty() && conditionOutfit->monsterName != monsterName) {
 			const auto monsterType = g_monsters().getMonsterType(conditionOutfit->monsterName);
 			if (monsterType) {
 				setOutfit(monsterType->info.outfit);
@@ -2453,7 +2453,7 @@ void ConditionSpellCooldown::addCondition(std::shared_ptr<Creature> creature, co
 		setTicks(addCondition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			std::shared_ptr<Player> player = creature->getPlayer();
+			const auto player = creature->getPlayer();
 			if (player) {
 				player->sendSpellCooldown(subId, ticks);
 			}
@@ -2467,7 +2467,7 @@ bool ConditionSpellCooldown::startCondition(std::shared_ptr<Creature> creature) 
 	}
 
 	if (subId != 0 && ticks > 0) {
-		std::shared_ptr<Player> player = creature->getPlayer();
+		const auto player = creature->getPlayer();
 		if (player) {
 			player->sendSpellCooldown(subId, ticks);
 		}
@@ -2484,7 +2484,7 @@ void ConditionSpellGroupCooldown::addCondition(std::shared_ptr<Creature> creatur
 		setTicks(addCondition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			std::shared_ptr<Player> player = creature->getPlayer();
+			const auto player = creature->getPlayer();
 			if (player) {
 				player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 			}
@@ -2498,7 +2498,7 @@ bool ConditionSpellGroupCooldown::startCondition(std::shared_ptr<Creature> creat
 	}
 
 	if (subId != 0 && ticks > 0) {
-		std::shared_ptr<Player> player = creature->getPlayer();
+		const auto player = creature->getPlayer();
 		if (player) {
 			player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 		}

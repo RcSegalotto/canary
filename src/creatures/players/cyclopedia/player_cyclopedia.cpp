@@ -39,7 +39,7 @@ void PlayerCyclopedia::loadDeathHistory(uint16_t page, uint16_t entriesPerPage) 
 
 	uint32_t playerID = m_player.getID();
 	std::function<void(DBResult_ptr, bool)> callback = [playerID, page, entriesPerPage](const DBResult_ptr &result, bool) {
-		std::shared_ptr<Player> player = g_game().getPlayerByID(playerID);
+		const auto player = g_game().getPlayerByID(playerID);
 		if (!player) {
 			return;
 		}
@@ -89,7 +89,7 @@ void PlayerCyclopedia::loadRecentKills(uint16_t page, uint16_t entriesPerPage) {
 
 	uint32_t playerID = m_player.getID();
 	std::function<void(DBResult_ptr, bool)> callback = [playerID, page, entriesPerPage](const DBResult_ptr &result, bool) {
-		std::shared_ptr<Player> player = g_game().getPlayerByID(playerID);
+		const auto player = g_game().getPlayerByID(playerID);
 		if (!player) {
 			return;
 		}
