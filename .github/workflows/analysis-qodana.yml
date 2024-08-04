@@ -25,9 +25,7 @@ jobs:
         uses: JetBrains/qodana-action@v2024.1
         with:
           pr-mode: false
-          push-fixes: pull-request
-          args: >
-            --compile-commands ./build/linux-debug/compile_commands.json
-            --apply-fixes
+          push-fixes: branch
+          args: --compile-commands ./build/linux-debug/compile_commands.json
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
