@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - beats-fixs
 
 jobs:
   qodana:
@@ -23,6 +24,8 @@ jobs:
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2024.1
         with:
-          args: --compile-commands,./build/linux-debug/compile_commands.json
+          pr-mode: false
+          push-fixes: pull-request
+          args: --compile-commands ./build/linux-debug/compile_commands.json --apply-fixes
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
